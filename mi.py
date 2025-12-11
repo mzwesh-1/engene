@@ -7,7 +7,7 @@ import pandas as pd
 from datetime import datetime
 
 # Page config
-st.set_page_config(page_title="AI Chatbot with PDF", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Super Smart", page_icon="🤖", layout="wide")
 
 # Initialize session state
 if "messages" not in st.session_state:
@@ -130,7 +130,7 @@ if prompt := st.chat_input("Ask me anything about your data..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-pro')
                 
                 # Build full prompt with context
                 full_prompt = prompt
