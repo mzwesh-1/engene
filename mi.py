@@ -19,7 +19,6 @@ if "data_context" not in st.session_state:
 if "request_count" not in st.session_state:
     st.session_state.request_count = 0
 
-# Configure API Key from Streamlit Secrets
 # Configure API Key with better error handling
 api_configured = False
 try:
@@ -130,7 +129,35 @@ if prompt := st.chat_input("Ask me anything about your data..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                model = genai.GenerativeModel('gemini-1.5-flash-latest')
+                # Try multiple models until one works
+                model = None
+                model_names = [
+                    'gemini-1.5-flash',
+                    'gemini-1.5-pro',
+                    'gemini-pro',
+                    'models/gemini-1.5-flash',
+                    'models/gemini-1.5-pro',
+                    'models/gemini-pro'
+                ]
+                
+                last_error = None
+                for model_name in model_names:
+                    try:
+                        model = genai.GenerativeModel(model_name)
+                        # Test with a simple prompt to verify it works
+                        test = model.generate_content("test")
+                        # If we get here without error, this model works!
+                        break
+                    except Exception as e:
+                        last_error = str(e)
+                        model = None
+                        continue
+                
+                if model is None:
+                    st.error(f"❌ Could not connect to any Gemini model.")
+                    st.error(f"Last error: {last_error}")
+                    st.info("💡 Please check your API key in Streamlit Secrets.")
+                    st.stop()
                 
                 # Build full prompt with context
                 full_prompt = prompt
