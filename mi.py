@@ -20,13 +20,20 @@ if "request_count" not in st.session_state:
     st.session_state.request_count = 0
 
 # Configure API Key from Streamlit Secrets
+# Configure API Key with better error handling
+api_configured = False
 try:
-    api_key = st.secrets["GEMINI_API_KEY"]
-    genai.configure(api_key=api_key)
-    api_configured = True
+    if "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+        genai.configure(api_key=api_key)
+        api_configured = True
+    else:
+        st.error("⚠️ API Key not found in secrets. Please configure GEMINI_API_KEY in Streamlit Cloud.")
+        st.info("💡 Go to your app settings → Secrets → Add: GEMINI_API_KEY = \"your-api-key\"")
+        st.stop()
 except Exception as e:
-    api_configured = False
-    st.error("⚠️ API Key not configured. Please contact the administrator.")
+    st.error(f"⚠️ Error configuring API: {str(e)}")
+    st.info("💡 Please check your Streamlit secrets configuration.")
     st.stop()
 
 # Sidebar

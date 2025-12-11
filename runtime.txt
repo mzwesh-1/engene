@@ -1,0 +1,40 @@
+python-3.11
+```
+
+3. Save the file
+
+---
+
+### **Step 7: Your Folder Structure Should Look Like This**
+```
+engene/
+├── .streamlit/
+│   └── config.toml          ← NEW
+├── .gitignore
+├── mi.py                     ← UPDATED
+├── requirements.txt          ← UPDATED
+└── runtime.txt               ← NEW
+```
+
+---
+
+### **Step 8: Push Changes to GitHub Using VS Code**
+
+Now let's push these changes to GitHub:
+
+#### **Method A: Using VS Code Git Interface (Easier)**
+
+1. Look at the left sidebar - click the **Source Control** icon (looks like branches, 3rd icon from top)
+
+2. You should see your changed files listed:
+   - `mi.py`
+   - `requirements.txt`
+   - `.streamlit/config.toml`
+   - `runtime.txt`
+
+3. Hover over each file and click the **+** (plus) button to stage them
+   - Or click the **+** next to "Changes" to stage all at once
+
+4. At the top, in the message box, type:
+```
+   Fix deployment issues and add config
