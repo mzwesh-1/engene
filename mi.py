@@ -129,15 +129,13 @@ if prompt := st.chat_input("Ask me anything about your data..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                # Try multiple models until one works
+                # Updated model names for current Gemini API
                 model = None
                 model_names = [
-                    'gemini-1.5-flash',
-                    'gemini-1.5-pro',
-                    'gemini-pro',
-                    'models/gemini-1.5-flash',
-                    'models/gemini-1.5-pro',
-                    'models/gemini-pro'
+                    'gemini-2.5-flash',      # Fast, balanced, cost-efficient (recommended)
+                    'gemini-2.5-pro',        # Complex reasoning and coding
+                    'gemini-1.5-flash',      # Fallback to 1.5 series
+                    'gemini-1.5-pro',        # Fallback to 1.5 pro
                 ]
                 
                 last_error = None
@@ -156,7 +154,8 @@ if prompt := st.chat_input("Ask me anything about your data..."):
                 if model is None:
                     st.error(f"❌ Could not connect to any Gemini model.")
                     st.error(f"Last error: {last_error}")
-                    st.info("💡 Please check your API key in Streamlit Secrets.")
+                    st.info("💡 Please check your API key and ensure you have access to Gemini models.")
+                    st.info("📖 Visit https://ai.google.dev/ to verify your API key and model access.")
                     st.stop()
                 
                 # Build full prompt with context
@@ -216,10 +215,13 @@ if prompt := st.chat_input("Ask me anything about your data..."):
             except Exception as e:
                 error_msg = str(e)
                 if "quota" in error_msg.lower() or "limit" in error_msg.lower():
-                    st.error("⚠️ Daily usage limit reached. Please try again later or contact support.")
+                    st.error("⚠️ Daily usage limit reached. Please try again later or check your API quota.")
+                elif "404" in error_msg or "not found" in error_msg.lower():
+                    st.error("⚠️ Model not available. Your API key may not have access to the requested models.")
+                    st.info("💡 Visit https://ai.google.dev/ to check your API key permissions and available models.")
                 else:
                     st.error(f"Error: {error_msg}")
-                st.info("💡 If you continue experiencing issues, please refresh the page or contact support.")
+                st.info("💡 If issues persist, try refreshing the page or checking your API configuration.")
 
 # Footer
 st.divider()
