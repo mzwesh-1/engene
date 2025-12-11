@@ -130,7 +130,7 @@ if prompt := st.chat_input("Ask me anything about your data..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                model = genai.GenerativeModel('gemini-pro')
+                model = genai.GenerativeModel('gemini-1.5-flash-latest')
                 
                 # Build full prompt with context
                 full_prompt = prompt
